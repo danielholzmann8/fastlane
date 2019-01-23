@@ -135,6 +135,16 @@ module Scan
     end
 
     def test_results
+      # Used prettifier is either not creating test reports (e.g xcbeautify) or xcpretty failed to generate the report
+      # Try to generate test report using trainer
+      unless Scan.cache[:temp_junit_report]
+        output_dir = Scan.config[:output_directory]
+        plist_file_dir = Dir["#{Scan.config[:derived_data_path]}/Logs/Test/*.xcresult"]
+        cmd = "trainer -e .junit -o #{output_dir} -p #{plist_file_dir[0]}"
+        system(cmd)
+        Scan.cache[:temp_junit_report] = "#{Scan.config[:output_directory]}/TestSummaries.junit"
+      end
+
       temp_junit_report = Scan.cache[:temp_junit_report]
       return File.read(temp_junit_report) if temp_junit_report && File.file?(temp_junit_report)
 

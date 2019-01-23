@@ -3,8 +3,8 @@ require_relative 'module'
 module Scan
   class TestResultParser
     def parse_result(output)
-      # e.g. ...<testsuites tests='2' failures='1'>...
-      matched = output.scan(/<testsuites\b(?=[^<>]*\s+tests='(\d+)')(?=[^<>]*\s+failures='(\d+)')[^<>]+>/)
+      # e.g. ...<testsuites tests='2' failures='1'>...<testsuites tests="2" failures="1">.
+      matched = output.scan(/<testsuites\b(?=[^<>]*\s+tests=['"](\d+)['"])(?=[^<>]*\s+failures=['"](\d+)['"])[^<>]+>/)
 
       if matched && matched.length == 1 && matched[0].length == 2
         tests = matched[0][0].to_i
