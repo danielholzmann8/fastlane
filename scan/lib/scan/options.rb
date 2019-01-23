@@ -237,6 +237,14 @@ module Scan
                                      description: "Generate the json compilation database with clang naming convention (compile_commands.json)",
                                      is_string: false,
                                      default_value: false),
+        FastlaneCore::ConfigItem.new(key: :prettifier,
+                                      short_option: "-F",
+                                      env_name: "SCAN_XCODE_BUILD_PRETTIFIER",
+                                      description: "Custom xcodebuild output formatter (e.g 'xcpretty', 'xcbeautify', ..)",
+                                      conflicting_options: [:formatter, :xcpretty_args, :output_style],
+                                      default_value: "xcpretty",
+                                      optional: true,
+                                      is_string: true),
 
         # concurrency
         FastlaneCore::ConfigItem.new(key: :max_concurrent_simulators,

@@ -113,9 +113,14 @@ module Scan
                                                                          Scan.config[:output_directory],
                                                                          Scan.config[:use_clang_report_name],
                                                                          Scan.config[:xcpretty_args])
-      reporter_options = @reporter_options_generator.generate_reporter_options
-      reporter_xcpretty_args = @reporter_options_generator.generate_xcpretty_args_options
-      return pipe << "| xcpretty #{formatter.join(' ')} #{reporter_options.join(' ')} #{reporter_xcpretty_args}"
+
+      prettifier = Scan.config[:prettifier] ||= 'xcpretty'
+      if prettifier == 'xcpretty'
+        reporter_options = @reporter_options_generator.generate_reporter_options
+        reporter_xcpretty_args = @reporter_options_generator.generate_xcpretty_args_options
+        prettifier << " #{formatter.join(' ')} #{reporter_options.join(' ')} #{reporter_xcpretty_args}"
+      end
+      return pipe << "| #{prettifier}"
     end
 
     # Store the raw file

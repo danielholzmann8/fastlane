@@ -158,6 +158,14 @@ describe Scan do
       expect(result.last).to include("| xcpretty -f 'custom-formatter.rb'")
     end
 
+    it "supports custom xcodebuild formatter", requires_xcodebuild: true do
+      options = { prettifier: "xcbeautify", project: "./scan/examples/standard/app.xcodeproj", sdk: "9.0" }
+      Scan.config = FastlaneCore::Configuration.create(Scan::Options.available_options, options)
+
+      result = @test_command_generator.generate
+      expect(result.last).to include("| xcbeautify")
+    end
+
     describe "Standard Example" do
       before do
         options = { project: "./scan/examples/standard/app.xcodeproj" }
